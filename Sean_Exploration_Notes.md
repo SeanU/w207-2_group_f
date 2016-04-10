@@ -8,7 +8,7 @@ I started with some fairly basic dummy coding of features:
   - For animals with no age specified, I set the age to the mean of all animals in the set with an age specified.
   - (It may be better to create a separate HasAge, code missing ages to 0, and interact them.)
   - Alternatively, should at least segregate by species in order to assign ages.
-  - I did not normalize. Ages are 
+  - I did not normalize. Ages are in range [0,22].
 4. Whether or not it is a mix (specified by presence of either 'mix' or '/' in the breed string)
 5. Sex (Female, Male, 0 for both if NaN)
 6. Intact (0 for NaN, too).
@@ -176,4 +176,31 @@ I won't bother pasting the result since they were all the same.
 
 ### Polynomial kernel
 
-In addition to the C's and R's from above, I also tried degrees [1, 2, 3, 4]. This one's not done yet. It might never be. Insert Estragon soliloquy.
+For time expediency's sake, I reduced the search space on this one. I only looked at degree 2, and [.01, .1, 1, 10] for both C and R.  It peaks at just under **66% accuracy for C=10 and R=10**, which is on the boundary of the search space, so I'm not sure I've got a good estimate of how well it can perform.  Will probably want to come back to this one later.
+
+```
+Best parameters: {'C': 10, 'coef0': 10, 'degree': 2}
+
+All parameters:
+	mean: 0.41412, std: 0.00229, params: {'C': 0.01, 'coef0': 0.01, 'degree': 2}
+	mean: 0.41461, std: 0.00192, params: {'C': 0.01, 'coef0': 0.1, 'degree': 2}
+	mean: 0.60144, std: 0.00474, params: {'C': 0.01, 'coef0': 1, 'degree': 2}
+	mean: 0.62842, std: 0.00536, params: {'C': 0.01, 'coef0': 10, 'degree': 2}
+	mean: 0.44177, std: 0.00730, params: {'C': 0.1, 'coef0': 0.01, 'degree': 2}
+	mean: 0.61536, std: 0.00542, params: {'C': 0.1, 'coef0': 0.1, 'degree': 2}
+	mean: 0.63418, std: 0.00453, params: {'C': 0.1, 'coef0': 1, 'degree': 2}
+	mean: 0.64731, std: 0.00259, params: {'C': 0.1, 'coef0': 10, 'degree': 2}
+	mean: 0.62939, std: 0.00480, params: {'C': 1, 'coef0': 0.01, 'degree': 2}
+	mean: 0.64432, std: 0.00445, params: {'C': 1, 'coef0': 0.1, 'degree': 2}
+	mean: 0.65169, std: 0.00242, params: {'C': 1, 'coef0': 1, 'degree': 2}
+	mean: 0.65296, std: 0.00193, params: {'C': 1, 'coef0': 10, 'degree': 2}
+	mean: 0.65801, std: 0.00361, params: {'C': 10, 'coef0': 0.01, 'degree': 2}
+	mean: 0.65779, std: 0.00433, params: {'C': 10, 'coef0': 0.1, 'degree': 2}
+	mean: 0.65917, std: 0.00323, params: {'C': 10, 'coef0': 1, 'degree': 2}
+	mean: 0.65966, std: 0.00262, params: {'C': 10, 'coef0': 10, 'degree': 2}
+```
+
+## SVM (LinearSVC)
+
+I looked at the full suite of C's from above (from .01 to 100), and both hinge and squared hinge loss. I only examined L2 regularization.
+
