@@ -204,3 +204,28 @@ All parameters:
 
 I looked at the full suite of C's from above (from .01 to 100), and both hinge and squared hinge loss. I only examined L2 regularization.
 
+It's peaking at **64% with squared hinge loss, C=.05**.
+
+```
+Best parameters: {'loss': 'squared_hinge', 'C': 0.05}
+
+All parameters:
+	mean: 0.62412, std: 0.00472, params: {'loss': 'hinge', 'C': 0.01}
+	mean: 0.64342, std: 0.00325, params: {'loss': 'squared_hinge', 'C': 0.01}
+	mean: 0.61181, std: 0.00661, params: {'loss': 'hinge', 'C': 0.05}
+	mean: 0.64383, std: 0.00253, params: {'loss': 'squared_hinge', 'C': 0.05}
+	mean: 0.61405, std: 0.00160, params: {'loss': 'hinge', 'C': 0.1}
+	mean: 0.64353, std: 0.00230, params: {'loss': 'squared_hinge', 'C': 0.1}
+	mean: 0.60500, std: 0.00568, params: {'loss': 'hinge', 'C': 0.5}
+	mean: 0.64372, std: 0.00240, params: {'loss': 'squared_hinge', 'C': 0.5}
+	mean: 0.61592, std: 0.00653, params: {'loss': 'hinge', 'C': 1}
+	mean: 0.64380, std: 0.00256, params: {'loss': 'squared_hinge', 'C': 1}
+	mean: 0.62670, std: 0.00175, params: {'loss': 'hinge', 'C': 5}
+	mean: 0.64170, std: 0.00547, params: {'loss': 'squared_hinge', 'C': 5}
+	mean: 0.62726, std: 0.00394, params: {'loss': 'hinge', 'C': 10}
+	mean: 0.63003, std: 0.01163, params: {'loss': 'squared_hinge', 'C': 10}
+	mean: 0.62677, std: 0.01128, params: {'loss': 'hinge', 'C': 50}
+	mean: 0.62640, std: 0.00930, params: {'loss': 'squared_hinge', 'C': 50}
+	mean: 0.61850, std: 0.01119, params: {'loss': 'hinge', 'C': 100}
+	mean: 0.61170, std: 0.00217, params: {'loss': 'squared_hinge', 'C': 100}
+```
