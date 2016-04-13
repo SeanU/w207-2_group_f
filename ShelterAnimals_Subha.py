@@ -383,11 +383,11 @@ print 'Accuracy (a random forest):', rfc.score(X_test, y_test)
 
 
 abc = AdaBoostClassifier(base_estimator=DecisionTreeClassifier(max_depth=3), n_estimators=100, learning_rate=0.1)
-
 abc.fit(X_train, y_train)
-
+y_pred = abc.predict(X_test)
+print np.mean(y_pred == y_test.values)
 #0.6418
-print 'Accuracy (adaboost with decision trees):', abc.score(X_test, y_test)
+#print 'Accuracy (adaboost with decision trees):', abc.score(X_test, y_test)
 
 # ### Not particularly good, but whatever. To create a submission file I think we need the 
 
@@ -395,15 +395,16 @@ print 'Accuracy (adaboost with decision trees):', abc.score(X_test, y_test)
 
 # Not particularly good, but whatever. To create a submission file I think we need the 
 # robability for each class. First we retrain on entire dataset then classify the test data.
-y_pred_sub = lr.fit(X_train_all, y_train_all).predict_proba(X_test_all)
+y_pred_sub = abc.fit(X_train_all, y_train_all).predict(X_test_all)
 
+rows = {"Adoption":[1,0,0,0,0] , "Died":[0,1,0,0,0], "Euthanasia":[0,0,1,0,0], "Return_to_owner":[0,0,0,1,0], "Transfer":[0,0,0,0,1] }
 
 # ### Prepare the submission file...
 
 # In[ ]:
 
 # Prepare the submission file
-sub = pd.DataFrame(y_pred_sub, columns=['Adoption', 'Died', 'Euthanasia', 'Return_to_owner', 'Transfer'])
+sub = pd.DataFrame([rows[y] for y in y_pred_sub], columns=['Adoption', 'Died', 'Euthanasia', 'Return_to_owner', 'Transfer'])
 sub.insert(0, 'ID', ids_test.astype(int))
 
 
@@ -414,7 +415,7 @@ sub.head()
 
 # In[ ]:
 
-sub.to_csv("submission.csv", index=False)
+sub.to_csv("submission2.csv", index=False)
 
 
 # In[ ]:
