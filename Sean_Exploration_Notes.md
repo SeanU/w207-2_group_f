@@ -77,7 +77,7 @@ All parameters:
 
 In addition to the C's, I tried gammas in [.01, .05, .1, .5, 1, 5, 10, 50, 100]. 
 
-Peak was 68% at C=5, gamma=.1.  This is a fair bit better than LR, but the grid search still took quite a while. For all C's but one, the best gamma was .1. For that one, .5 was very slightly better.
+**Peak was 68% at C=5, gamma=.1.**  This is a fair bit better than LR, but the grid search still took quite a while. For all C's but one, the best gamma was .1. For that one, .5 was very slightly better.
 
 ```
 Best parameters: {'C': 5, 'gamma': 0.1}
@@ -229,3 +229,90 @@ All parameters:
 	mean: 0.61850, std: 0.01119, params: {'loss': 'hinge', 'C': 100}
 	mean: 0.61170, std: 0.00217, params: {'loss': 'squared_hinge', 'C': 100}
 ```
+
+# More feature cleaning
+
+Next up, I'm going to look at cleaning up some of the prior features. This is goign to stick with LR, so the score to beat is 65%.
+
+## Spay/neuter status
+
+I've got a single Fixed variable. Better to have separate Fixed and Intact, I think, with false for both as a baseline to use on NA values.
+
+**This gets the score to 65%**. That is an equivocal result, but I'm going to keep it because it's more in line with how sex is handled.
+
+## Age
+
+Age is a weird one; it could use a lot of work.  Here's the plan:
+
+### Separate means for dogs and cats
+
+I don't expect it to have much effect now, but it will help when interacting these terms later.
+
+**This gets the score to 65%**, which is again equivocal, but I'm keepin' it.
+
+### Squared age term
+I bet the impact of age on adoptability is nonlinear.
+
+**This ups the score to 65.5%**, so it's a keeper.
+
+### Log age term
+Squared age might not be a great fit for really young animals,
+so adding a log age term just to see if it helps at that end of the scale.
+
+**This gets it to 66.2%.** And the ratchet clicks again.
+
+### Rescaling
+Now getting all the ages to the range [0,1]. I'm not going to standardize since most features are either 0 or 1.
+
+**This drops it to 66.0%.** Not encouraging so I'm going to drop it, but keep the code commented so it can be revisited later. 
+
+### AgeUnknown column
+Because an unknown age might have a negative effect, since it represents uncertainty for potential adopters.
+
+**Still 66.2**, so going to leave it out.
+
+# Dropping features
+'Cuz I might be overfitting on some of these
+
+## Dropping day of month
+**Leaves score at 66%**, so I'm leaving it out for parsimony.
+
+## Dropping hour of day
+**Down to 64%**, so I'll put it back.
+
+# Adding more features
+
+## Color
+Used str.get_dummies(), so there aren't separate sets of dummies for the two colors if more than one is reported.
+
+Also have dummies for merle/tabby/etc.
+
+**66.4%**, so I guess it's worth keeping. Meh.
+
+## Breed
+Similar approach to above.
+
+**66.6%**, so again not super inspiring but I guess worth taking. Meh.
+
+# Interaction terms
+
+## Species X HasName
+Adding "DogWithName" feature
+**66.5%**
+
+## Species X Sex
+Concatenating Sex and AnimalType
+
+**66.5%**
+
+## Species X spay/neuter
+**66.6%**
+
+## Sex X spay/neuter
+**66.6%**
+
+## IsMixed X IsDog
+**66.7%**
+
+## Month X Species
+By appending '-Dog' to Month for all dogs.
